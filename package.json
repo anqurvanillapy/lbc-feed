@@ -1,21 +1,22 @@
 {
-  "name": "lbc-news",
+  "name": "lbc-feed",
   "version": "0.1.0",
-  "description": "News app for left-behind children (assignment)",
+  "description": "News feed for left-behind children survey (assignment)",
   "main": "index.js",
   "directories": {
     "doc": "docs"
   },
-  "dependencies": {
-    "electron": "^1.6.2"
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^1.6.2",
+    "electron-packager": "^8.6.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/anqurvanillapy/lbc-news.git"
+    "url": "git+https://github.com/anqurvanillapy/lbc-feed.git"
   },
   "keywords": [
     "electron"
@@ -23,7 +24,7 @@
   "author": "TeamDev2",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/anqurvanillapy/lbc-news/issues"
+    "url": "https://github.com/anqurvanillapy/lbc-feed/issues"
   },
-  "homepage": "https://github.com/anqurvanillapy/lbc-news#readme"
+  "homepage": "https://github.com/anqurvanillapy/lbc-feed#readme"
 }
