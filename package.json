@@ -8,12 +8,14 @@
   },
   "dependencies": {
     "dot": "^1.1.1",
+    "leveldown": "^1.6.0",
     "levelup": "^1.3.5",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
     "electron": "^1.6.2",
-    "electron-packager": "^8.6.0"
+    "electron-packager": "^8.6.0",
+    "electron-rebuild": "^1.5.7"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
