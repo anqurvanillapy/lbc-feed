@@ -10,7 +10,7 @@ var levelup = require('levelup')
 let win
 
 let xmls = ['guangming', 'nanfangdaily', 'sichuan'].map(xml => {
-  return path.join('resources', xml) + '.xml'
+  return path.join('assets', xml) + '.xml'
 })
 
 let urls = ['splash.html', 'index.html'].map(v => {
@@ -26,15 +26,18 @@ var db = levelup('./lbc-feed-db')
 function createWindow () {
   win = new BrowserWindow({ width: 800, height: 600 })
 
-  ;(cb => {
-    win.loadURL(urls[0])
-    setTimeout(_ => {
-      loadXML(xmls)
-      cb()
-    }, 500)
-  })(_ => {
+  win.loadURL(urls[0])
+  setTimeout(_ => {
+    db.get('init')
+    loadXML(xmls)
     win.loadURL(urls[1])
-  })
+  }, 500)
+
+  // TODO: Check if it is inited.
+  // db.get('news:23lh^200601161410077(S:193916305)', (err, val) => {
+  //   if (err) return console.error(err)
+  //   console.log(val)
+  // })
 
   win.on('closed', _ => {
     win = null
@@ -61,26 +64,20 @@ function loadXML (xmls) {
     let data = fs.readFileSync(xml)
     parser.parseString(data, (err, result) => {
       if (err) { console.error(err) }
-      result.ArrayOfNewsData.NewsData.forEach(item => {
-        console.log({
-          id: item['ID'],
-          title: item['Title'],
-          date: item['Date'],
+
+      // result.ArrayOfNewsData.NewsData.forEach() would raise errors.
+      for (let i = 0; i < result.length; ++i) {
+        db.put(result[i]['ID'], {
+          title: result[i]['Title'],
+          date: result[i]['Date'],
           tags: [],
-          url: item['Url'],
-          press: item['Location']
-        })
-        // db.put(item['ID'], {
-        //   title: item['Title'],
-        //   date: item['Date'],
-        //   tags: [],
-        //   url: item['Url'],
-        //   press: item['Location']
-        // }, {
-        //   sync: true,
-        //   valueEncoding: 'json'
-        // }, err => { return console.error(err) })
-      })
+          url: result[i]['Url'],
+          press: result[i]['Location']
+        }, {
+          sync: true,
+          valueEncoding: 'json'
+        }, err => { return console.error('db error: ' + err) })
+      }
     })
   })
 }

@@ -26,11 +26,11 @@ header {
   font-size: 1.5em;
 }
 
-header nav {
+header > nav {
   margin: .6em .5em;
 }
 
-header nav ul {
+header > nav ul {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -40,7 +40,7 @@ header nav ul {
   justify-content: center;
 }
 
-header nav ul li {
+header > nav ul li {
   display: inline-block;
   margin: 0 .3em;
 }
@@ -55,11 +55,11 @@ header nav ul li {
       text-decoration: none;
     }
 
-.menu__toggle {
+#menu__toggle {
   opacity: 0;
-  z-index: 1;
+  z-index: 2;
 }
-  .menu__toggle-label {
+  #menu__toggle-label {
     top: 27px;
     width: 20px;
     height: 3px;
@@ -67,9 +67,9 @@ header nav ul li {
     display: block;
     background: #fff;
     text-indent: -3000px;
-    z-index: 2;
+    z-index: 1;
   }
-    .menu__toggle-label::after, .menu__toggle-label::before {
+    #menu__toggle-label::after, #menu__toggle-label::before {
       width: 100%;
       height: 3px;
       display: block;
@@ -77,11 +77,27 @@ header nav ul li {
       background: #fff;
       content: "";
     }
-    .menu__toggle-label::before {
+    #menu__toggle-label::before {
       top: -6px;
     }
-    .menu__toggle-label::after {
+    #menu__toggle-label::after {
       top: 6px;
+    }
+  #menu__nav {
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    padding-top: 2em;
+    position: fixed;
+    background: royalblue;
+    box-shadow: 2px 0 5px #666;
+
+    transform: translate(-102%);
+    transition: transform .3s cubic-bezier(0,0,.3,1);
+  }
+    #menu__toggle:checked~#menu__nav {
+      transform: translate(0);
     }
 
 #stats-link button {
@@ -108,22 +124,22 @@ header nav ul li {
     }
       #stats-link button span::before {
         top: -2px;
-        left: 6px;
+        left: 12px;
         height: 18px;
       }
       #stats-link button span::after {
         top: -4px;
-        left: 12px;
+        left: 6px;
         height: 20px;
       }
 
 /**
  *  ============================================================================
- *  Main Components
+ *  Index Components
  *  ============================================================================
  */
 
-ul.main-statusbar li {
+#main-statusbar li {
   font-style: italic;
   color: #777;
 }
@@ -142,3 +158,22 @@ section.news-item {
   background: #fff;
   box-shadow: 0 1px 4px #dfdfdf, 0 -1px 4px #dfdfdf;
 }
+
+/**
+ *  ============================================================================
+ *  Item Components
+ *  ============================================================================
+ */
+
+ul#item__tags {
+  padding: 0;
+  display: inline-block;
+  list-style: none;
+}
+  ul#item__tags > li {
+    margin: 0 .4em;
+    display: inline-block;
+  }
+    ul#item__tags > li:before {
+      content: "#";
+    }
