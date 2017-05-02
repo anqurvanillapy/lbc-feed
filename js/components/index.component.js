@@ -5,7 +5,7 @@ let statusbar =
 
 let newsItem =
 `<section class="news-item">
-  <h1>Hello, world!</h1>
+  <h1><a href="item.html">Hello, world!</a></h1>
   <p>This is fine.</p>
 </section>`
 

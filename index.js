@@ -5,39 +5,44 @@ const path = require('path')
 const url = require('url')
 const fs = require('fs')
 const xml2js = require('xml2js')
-var levelup = require('levelup')
-
-let win
+const levelup = require('levelup')
 
 let xmls = ['guangming', 'nanfangdaily', 'sichuan'].map(xml => {
   return path.join('assets', xml) + '.xml'
 })
 
-let urls = ['splash.html', 'index.html'].map(v => {
+let urls = ['splash', 'index'].map(v => {
   return url.format({
-    pathname: path.join(__dirname, v),
+    pathname: `${path.join(__dirname, v)}.html`,
     protocol: 'file:',
     slashes: true
   })
 })
 
-var db = levelup('./lbc-feed-db')
+let db = levelup('./lbc-feed-db')
+let win
 
 function createWindow () {
   win = new BrowserWindow({ width: 800, height: 600 })
 
-  win.loadURL(urls[0])
-  setTimeout(_ => {
-    db.get('init')
-    loadXML(xmls)
-    win.loadURL(urls[1])
-  }, 500)
+  let splash = new Promise((resolve, reject) => {
+    win.loadURL(urls[0])
+    setTimeout(_ => {
+      db.get('init', err => {
+        // If key not found, the DB is not inited.
+        if (err) {
+          console.log('initiailizing DB...')
+          loadXML(xmls)
+        } else {
+          console.log('cache hit!')
+        }
+      })
+      resolve()
+    }, 1000)
+  })
 
-  // TODO: Check if it is inited.
-  // db.get('news:23lh^200601161410077(S:193916305)', (err, val) => {
-  //   if (err) return console.error(err)
-  //   console.log(val)
-  // })
+  splash.then(_ => { win.loadURL(urls[1]) })
+        .catch(reason => { return console.error(reason) })
 
   win.on('closed', _ => {
     win = null
@@ -59,25 +64,29 @@ app.on('activate', _ => {
 
 // Load XML files.
 function loadXML (xmls) {
-  xmls.forEach(xml => {
-    let parser = new xml2js.Parser()
-    let data = fs.readFileSync(xml)
-    parser.parseString(data, (err, result) => {
-      if (err) { console.error(err) }
+  db.put('init', true, err => {
+    if (err) return console.error(err)
 
-      // result.ArrayOfNewsData.NewsData.forEach() would raise errors.
-      for (let i = 0; i < result.length; ++i) {
-        db.put(result[i]['ID'], {
-          title: result[i]['Title'],
-          date: result[i]['Date'],
-          tags: [],
-          url: result[i]['Url'],
-          press: result[i]['Location']
-        }, {
-          sync: true,
-          valueEncoding: 'json'
-        }, err => { return console.error('db error: ' + err) })
-      }
+    xmls.forEach(xml => {
+      let parser = new xml2js.Parser()
+      let data = fs.readFileSync(xml)
+
+      parser.parseString(data, (err, result) => {
+        if (err) return console.error(err)
+
+        result.ArrayOfNewsData.NewsData.forEach(news => {
+          console.log(...news.ID)
+          db.put(...news.ID, {
+            title: news.Title[0],
+            date: news.Date[0],
+            tags: [],
+            url: news.Url[0],
+            press: news.Location[0]
+          }, { valueEncoding: 'json' }, err => {
+            if (err) return console.error(err)
+          })
+        })
+      })
     })
   })
 }

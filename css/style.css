@@ -57,30 +57,41 @@ header > nav ul li {
 
 #menu__toggle {
   opacity: 0;
-  z-index: 2;
+  z-index: 1;
+  cursor: pointer;
 }
-  #menu__toggle-label {
-    top: 27px;
+#menu__toggle-label {
+    top: 18px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    display: block;
+    background: royalblue;
+    cursor: pointer;
+    z-index: 2;
+}
+  #menu__toggle-label > span {
+    top: 8px;
     width: 20px;
     height: 3px;
     position: absolute;
-    display: block;
     background: #fff;
     text-indent: -3000px;
-    z-index: 1;
+    cursor: pointer;
   }
-    #menu__toggle-label::after, #menu__toggle-label::before {
+    #menu__toggle-label > span::after, #menu__toggle-label > span::before {
       width: 100%;
       height: 3px;
       display: block;
       position: absolute;
       background: #fff;
+      cursor: pointer;
       content: "";
     }
-    #menu__toggle-label::before {
+    #menu__toggle-label > span::before {
       top: -6px;
     }
-    #menu__toggle-label::after {
+    #menu__toggle-label > span::after {
       top: 6px;
     }
   #menu__nav {
@@ -105,6 +116,7 @@ header > nav ul li {
   height: 24px;
   border: none;
   background: transparent;
+  cursor: pointer;
 }
   #stats-link button span {
     top: 22px;
