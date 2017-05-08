@@ -88,8 +88,9 @@
       title: news.Title[0],
       date: news.Date[0],
       tags: [],
-      url: news.Url[0],
-      press: news.Location[0]
+      url: news.TrueUrl[0] || '',
+      press: news.Location[0],
+      deleted: false
     }).then(_ => {
       updateSubprogress()
       cb()

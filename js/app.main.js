@@ -1,6 +1,17 @@
 const PouchDB = require('pouchdb-browser')
 
+/* Database instance. */
 let db = new PouchDB('lbc-feed-db')
+
+/* Tags table. */
+// TODO
+const TAGSTBL = {
+  pressType: true,
+  newsType: true,
+  topic: true,
+  newsSource: true,
+  publicImage: true
+}
 
 /* Components rendering. */
 

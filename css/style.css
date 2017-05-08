@@ -1,9 +1,12 @@
+* {
+  box-sizing: border-box;
+}
+
 html, body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
@@ -30,7 +33,7 @@ header > nav {
   margin: .6em .5em;
 }
 
-header > nav ul {
+header > nav > ul {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -40,7 +43,7 @@ header > nav ul {
   justify-content: center;
 }
 
-header > nav ul li {
+header > nav > ul > li {
   display: inline-block;
   margin: 0 .3em;
 }
@@ -110,6 +113,13 @@ header > nav ul li {
     #menu__toggle:checked~#menu__nav {
       transform: translate(0);
     }
+    #menu__nav > div {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      padding: .5em;
+      font-size: .8em;
+    }
 
 #stats-link button {
   width: 24px;
@@ -156,12 +166,19 @@ header > nav ul li {
   color: #777;
 }
 
-section.news-item {
+.news-item {
   padding: .8em;
   margin: .6em auto;
   background: #fff;
   box-shadow: 0 1px 4px #dfdfdf, 0 -1px 4px #dfdfdf;
 }
+  .news-item h1 a {
+    color: #333;
+    text-decoration: none;
+  }
+  .news-item__tags::before {
+    content: "#";
+  }
 
 #more-button {
   width: 100%;
@@ -169,7 +186,31 @@ section.news-item {
   border: none;
   background: #fff;
   box-shadow: 0 1px 4px #dfdfdf, 0 -1px 4px #dfdfdf;
+  cursor: pointer;
 }
+
+#back-to-top {
+  width: 3em;
+  height: 3em;
+  position: fixed;
+  right: 1em;
+  bottom: 1em;
+  border-radius: 1.5em;
+  background: crimson;
+  box-shadow: 1px 1px 2px #777;
+}
+  #back-to-top span {
+    width: 0;
+    height: 0;
+    left: 1em;
+    top: 1em;
+    position: absolute;
+    display: block;
+    border-left: .5em solid transparent;
+    border-right: .5em solid transparent;
+    border-bottom: .8em solid #fff;
+    text-indent: -3000px;
+  }
 
 /**
  *  ============================================================================
@@ -177,15 +218,15 @@ section.news-item {
  *  ============================================================================
  */
 
-ul#item__tags {
+#news-page__tags {
   padding: 0;
   display: inline-block;
   list-style: none;
 }
-  ul#item__tags > li {
+  #news-page__tags > li {
     margin: 0 .4em;
     display: inline-block;
   }
-    ul#item__tags > li:before {
+    #news-page__tags > li:before {
       content: "#";
     }
