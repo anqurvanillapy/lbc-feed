@@ -1,8 +1,8 @@
-/**
- *  ============================================================================
- *  Rendering Components
- *  ============================================================================
- */
+const PouchDB = require('pouchdb-browser')
+
+let db = new PouchDB('lbc-feed-db')
+
+/* Components rendering. */
 
 // Render single component.
 function render (id, text) {
