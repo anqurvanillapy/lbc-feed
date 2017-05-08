@@ -3,25 +3,49 @@
 
   const fs = require('fs')
   const path = require('path')
+  const url = require('url')
   const xml2js = require('xml2js')
   const PouchDB = require('pouchdb-browser')
 
+  /* Data. */
   let db = new PouchDB('lbc-feed-db')
   let xmlFiles = ['guangming', 'nanfangdaily', 'sichuan'].map(xml => {
     return path.join('assets', xml) + '.xml'
   })
 
-  db.get('init').then(_ => {
-    console.log('cache hit!')
-    db.get('news:051l^200601202310013(S:196125026)').then(val => {
-      console.log(val)
-    })
-  }).catch(_ => {
-    console.log('initializing database...')
-    loadXMLs(xmlFiles).then(_ => { console.log('loadXMLs ok') })
+  /* Progressbar component. */
+  let done
+  let total = 0
+  let subtotal
+  let [progress, subprogress, loading] = [
+    'progress',
+    'subprogress',
+    'loading'
+  ].map(id => { return document.getElementById(id) })
+
+  /* Index path. */
+  let index = url.format({
+    pathname: `${path.join(__dirname, 'index')}.html`,
+    protocol: 'file:',
+    slashes: true
   })
 
-  // Load XML files.
+  /* Entry point. */
+  db.get('init').then(_ => {
+    console.log('cache hit')
+    done = total = subtotal = 2
+    updateSubprogress()
+    updateProgress()
+    redirect()
+  }).catch(_ => {
+    console.log('initializing database...')
+    loadXMLs(xmlFiles).then(_ => {
+      console.log('loadXMLs ok')
+      redirect()
+    })
+  })
+
+  /* Load XML files. */
   function loadXMLs (xmls) {
     return new Promise(resolve => {
       db.put({ _id: 'init' }).then(_ => {
@@ -44,7 +68,9 @@
       if (err) return console.error(err)
 
       let newsArray = result.ArrayOfNewsData.NewsData
-      console.log(newsArray.length)
+      done = 0
+      subtotal = newsArray.length
+      updateProgress()
 
       let newsPromises = newsArray.reduce((chain, news) => {
         return chain.then(_ => new Promise(resolve => {
@@ -64,6 +90,26 @@
       tags: [],
       url: news.Url[0],
       press: news.Location[0]
-    }).then(msg => { cb() }).catch(err => { console.error(err) })
+    }).then(_ => {
+      updateSubprogress()
+      cb()
+    }).catch(err => { console.error(err) })
+  }
+
+  /* Progressbar */
+  function updateProgress () {
+    progress.textContent = ++total
+  }
+
+  function updateSubprogress () {
+    subprogress.style.width = done++ / subtotal * 100 + '%'
+  }
+
+  /* Redirect to index. */
+  function redirect () {
+    loading.innerHTML = 'Welcome :)'
+    setTimeout(_ => {
+      window.location.replace(index)
+    }, 1000)
   }
 })()

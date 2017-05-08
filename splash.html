@@ -32,12 +32,28 @@
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 1em;
   }
+
+  #subprogressbar {
+    width: 70%;
+    height: 1em;
+    border-radius: 2px;
+    box-shadow: 0 0 2px #aaa;
+  }
+    #subprogress {
+      width: 0;
+      height: 100%;
+      background: royalblue;
+    }
   </style>
 </head>
 <body>
   <h1>LBC Feed</h1>
   <p>News Feed For Left-behind Children Survey.</p>
-  <p style="color: #aaa; font-family: monospace">Loading...</p>
+  <div id="subprogressbar"><div id="subprogress"></div></div>
+  <p id="loading" style="color: #999; font-family: monospace">
+    Loading...
+    <span id="progress"></span> / 3
+  </p>
   <script src="js/app.splash.js"></script>
 </body>
 </html>
