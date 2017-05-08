@@ -1,11 +1,3 @@
-/**
- *  Test cases
- *  ==========
- *
- *  1. System booting: XML data transformed into JSON in database
- *  2. News category updates
- */
-
 const levelup = require('levelup')
 const assert = require('assert')
 

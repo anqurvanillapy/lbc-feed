@@ -1,6 +1,3 @@
-# Database directory.
-lbc-feed-db/
-
 # Electron OS app build directory
 *-win32-x64/
 

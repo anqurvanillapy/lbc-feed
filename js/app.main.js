@@ -1,8 +1,10 @@
-'use strict'
+/**
+ *  ============================================================================
+ *  Rendering Components
+ *  ============================================================================
+ */
 
-/* Components rendering methods. */
-
-// Rener single component.
+// Render single component.
 function render (id, text) {
   document.getElementById(id).innerHTML = text
 }
