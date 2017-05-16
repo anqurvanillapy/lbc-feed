@@ -3,26 +3,30 @@
 
   const qs = require('querystring')
 
-  /* Query options. */
-  let options = {
-    include_docs: true,
-    limit: 10,
-    skip: 1
-  }
-
   /* Filters and results. */
   let newsArray = []
-  let filterTags = []
+  let params = qs.parse(window.location.search.slice(1))
+  let filterTags = Object.values(params) || []
+  console.log(filterTags)
+
+  /* Query options, for db.allDocs and db.find. */
+  let options = {
+    selector: {
+      _id: {$gt: null},  // _id for pagination
+      deleted: false
+    },
+    sort: ['_id'],
+    limit: 10
+  }
 
   function fetchNextPage () {
     return new Promise((resolve, reject) => {
-      db.allDocs(options).then(res => {
-        if (res && res.rows.length > 0) {
-          // Pagination.
-          options.startkey = res.rows[res.rows.length - 1].id
-          resolve(res.rows)
-        } else {
-          reject()
+      options.selector.deleted = filterTags.includes('true')  // deleted
+      if (filterTags.length > 0) options.selector.tags = {$in: filterTags}
+      db.find(options).then(res => {
+        if (res && res.docs.length > 0) {
+          options.selector._id.$gte = res.docs[res.docs.length - 1]._id
+          resolve(res.docs)
         }
       })
     })
@@ -31,17 +35,18 @@
   function nextPage () {
     fetchNextPage().then(page => {
       page.forEach(news => {
+        news = news.doc || news
         newsArray.push(
           `<section class="news-item">
             <h1>
-              <a href="item.html?${qs.stringify({id: news.id})}">
-                ${news.doc.title}
+              <a href="item.html?${qs.stringify({id: news._id})}">
+                ${news.title}
               </a>
             </h1>
-            <p>${news.doc.press} <code>${news.doc.date}</code></p>
-            <p>${news.doc.tags.map(t => {
-              return `<a class="news-item__tags" href="#">${t}</a>`
-            }).join(' ')}</p>
+            <p>${news.press} <code>${news.date}</code></p>
+            <p>${news.tags.map(t => {
+              return `<a class="news-item__tags" href="#">${TAGSTBL[t]}</a>`
+            }).join('')}</p>
           </section>`)
       })
 
@@ -49,36 +54,30 @@
     })
   }
 
+  // TODO: stats.
   db.allDocs({ limit: 0 }).then(res => {
     let statusbar =
     `<li>共为您找到 ${res.total_rows - 1} 条新闻</li>
     <li>
       <span>当前筛选: </span>
-      <span>${(filterTags.length > 0) ? filterTags : '无'}</span>
+      <span>${(filterTags.length > 0) ? filterTags.map(t => {
+        return TAGSTBL[t]
+      }) : '无'}</span>
     </li>`
 
-    let indexMenu =
-    `<p style="color: #fff; padding: .5em; margin: 0;">新闻分类</p>
-    <div>
-      <ul>
-        <li>全选</li>
-        <li>反选</li>
-        <li>报纸类别</li>
-        <li>新闻类型</li>
-        <li>报道主题</li>
-        <li>报道主题</li>
-        <li>新闻报道消息来源</li>
-        <li>媒介形象呈现</li>
-      </ul>
-    </div>`
-
     nextPage()
-    renderAll({
-      'main-statusbar': statusbar,
-      'menu__nav': indexMenu
-    })
+    render('main-statusbar', statusbar)
   }).catch(err => { console.error(err) })
 
   /* Listeners. */
   document.getElementById('more-button').addEventListener('click', nextPage)
+  document.getElementById('submitTags').addEventListener('click', _ => {
+    let tagsForm = new FormData(document.querySelector('form'))
+
+    for (let [_, v] of tagsForm.entries()) {
+      filterTags.push(v)
+    }
+
+    window.location.replace(`index.html?${qs.stringify(filterTags)}`)
+  })
 })()

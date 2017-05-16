@@ -5,9 +5,10 @@
   const path = require('path')
   const url = require('url')
   const xml2js = require('xml2js')
-  const PouchDB = require('pouchdb-browser')
+  let PouchDB = require('pouchdb-browser')
 
   /* Data. */
+  PouchDB.plugin(require('pouchdb-find'))
   let db = new PouchDB('lbc-feed-db')
   let xmlFiles = ['guangming', 'nanfangdaily', 'sichuan'].map(xml => {
     return path.join('assets', xml) + '.xml'
@@ -31,32 +32,32 @@
   })
 
   /* Entry point. */
-  db.get('init').then(_ => {
-    console.log('cache hit')
-    done = total = subtotal = 2
-    updateSubprogress()
-    updateProgress()
-    redirect()
-  }).catch(_ => {
-    console.log('initializing database...')
-    loadXMLs(xmlFiles).then(_ => {
-      console.log('loadXMLs ok')
+  db.info().then(res => {
+    if (res.doc_count) {
+      console.log('cache hit')
+      done = total = subtotal = 2
+      updateSubprogress()
+      updateProgress()
       redirect()
-    })
+    } else {
+      console.log('initializing database...')
+      loadXMLs(xmlFiles).then(_ => {
+        console.log('loadXMLs ok')
+        redirect()
+      })
+    }
   })
 
   /* Load XML files. */
   function loadXMLs (xmls) {
     return new Promise(resolve => {
-      db.put({ _id: 'init' }).then(_ => {
-        let xmlsPromises = xmls.reduce((chain, xml) => {
-          return chain.then(_ => new Promise(resolve => {
-            parseXMLSync(xml, resolve)
-          }))
-        }, Promise.resolve())
+      let xmlsPromises = xmls.reduce((chain, xml) => {
+        return chain.then(_ => new Promise(resolve => {
+          parseXMLSync(xml, resolve)
+        }))
+      }, Promise.resolve())
 
-        xmlsPromises.then(_ => { resolve() })
-      })
+      xmlsPromises.then(_ => { resolve() })
     })
   }
 
@@ -90,6 +91,7 @@
       tags: [],
       url: news.TrueUrl[0] || '',
       press: news.Location[0],
+      content: news.EncodedContent[0] || '',
       deleted: false
     }).then(_ => {
       updateSubprogress()
@@ -108,9 +110,11 @@
 
   /* Redirect to index. */
   function redirect () {
-    loading.innerHTML = 'Welcome :)'
-    setTimeout(_ => {
-      window.location.replace(index)
-    }, 1000)
+    db.createIndex({index: {fields: ['tags', 'deleted']}}).then(_ => {
+      loading.innerHTML = 'Welcome :)'
+      setTimeout(_ => {
+        window.location.replace(index)
+      }, 1000)
+    })
   }
 })()

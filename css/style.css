@@ -115,11 +115,32 @@ header > nav > ul > li {
     }
     #menu__nav > div {
       width: 100%;
-      height: 100%;
+      height: 80%;
       background: #fff;
       padding: .5em;
       font-size: .8em;
+      overflow-y: scroll;
     }
+      #menu__nav > div > form > ul,
+      #menu__nav > div > form > ul > li > ul {
+        padding: 0;
+      }
+
+#topicCommendSub,
+#topicViolenceSub,
+#topicSexSub,
+#topicDeathSub,
+#pubimgPositiveSub {
+  display: none;
+}
+  #topicHelp:checked~#topicHelpSub,
+  #topicCommend:checked~#topicCommendSub,
+  #topicViolence:checked~#topicViolenceSub,
+  #topicSex:checked~#topicSexSub,
+  #topicDeath:checked~#topicDeathSub,
+  #pubimgPositive:checked~#pubimgPositiveSub {
+    display: block;
+  }
 
 #stats-link button {
   width: 24px;
@@ -176,9 +197,14 @@ header > nav > ul > li {
     color: #333;
     text-decoration: none;
   }
-  .news-item__tags::before {
-    content: "#";
+  .news-item__tags, .news-page__tags {
+    text-decoration: none;
   }
+    .news-item__tags:before, .news-page__tags:before {
+      color: #666;
+      content: "#";
+      margin: 0 .5em;
+    }
 
 #more-button {
   width: 100%;
@@ -218,15 +244,4 @@ header > nav > ul > li {
  *  ============================================================================
  */
 
-#news-page__tags {
-  padding: 0;
-  display: inline-block;
-  list-style: none;
-}
-  #news-page__tags > li {
-    margin: 0 .4em;
-    display: inline-block;
-  }
-    #news-page__tags > li:before {
-      content: "#";
-    }
+
