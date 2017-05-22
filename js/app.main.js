@@ -1,3 +1,6 @@
+const qs = require('querystring')
+const copy = require('copy-text-to-clipboard')
+
 let PouchDB = require('pouchdb-browser')
 PouchDB.plugin(require('pouchdb-find'))
 
@@ -106,4 +109,16 @@ function renderAll (comps) {
   Object.keys(comps).forEach(c => {
     document.getElementById(c).innerHTML = comps[c]
   })
+}
+
+// Render the tag navigator with active tags.
+function renderNav (tags) {
+  let tagOptions = document.querySelector('form').elements
+  for (let t of tags) tagOptions[t].checked = true
+}
+
+// Render logo href for getting back to previous query.
+function renderLogoHref (tags) {
+  if (typeof tags === 'string') tags = [tags] // might not be an array
+  document.querySelector('#logo a').href += `?${qs.stringify(tags)}`
 }

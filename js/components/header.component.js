@@ -185,16 +185,16 @@
                     <label for="topicDeath">留守儿童意外死亡</label>
                     <ul id="topicDeathSub">
                       <li>
-                        <input id="topicDeadthMale" type="radio" name="topicDeadth" value="topicDeadthMale"></input>
-                        <label for="topicDeadthMale">男</label>
+                        <input id="topicDeathMale" type="radio" name="topicDeath" value="topicDeathMale"></input>
+                        <label for="topicDeathMale">男</label>
                       </li>
                       <li>
-                        <input id="topicDeadthFemale" type="radio" name="topicDeadth" value="topicDeadthFemale"></input>
-                        <label for="topicDeadthFemale">女</label>
+                        <input id="topicDeathFemale" type="radio" name="topicDeath" value="topicDeathFemale"></input>
+                        <label for="topicDeathFemale">女</label>
                       </li>
                       <li>
-                        <input id="topicDeadthUnknown" type="radio" name="topicDeadth" value="topicDeadthUnknown"></input>
-                        <label for="topicDeadthUnknown">未提及</label>
+                        <input id="topicDeathUnknown" type="radio" name="topicDeath" value="topicDeathUnknown"></input>
+                        <label for="topicDeathUnknown">未提及</label>
                       </li>
                     </ul>
                   </li>

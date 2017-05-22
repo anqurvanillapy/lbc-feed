@@ -1,7 +1,8 @@
 (function () {
   'use strict'
 
-  const qs = require('querystring')
+  /* Components. */
+  let moreButton = document.getElementById('more-button')
 
   /* Filters and results. */
   let newsArray = []
@@ -9,7 +10,7 @@
   let filterTags = Object.values(params) || []
   console.log(filterTags)
 
-  /* Query options, for db.allDocs and db.find. */
+  /* Query options for db.find. */
   let options = {
     selector: {
       _id: {$gt: null},  // _id for pagination
@@ -21,25 +22,31 @@
 
   function fetchNextPage () {
     return new Promise((resolve, reject) => {
-      options.selector.deleted = filterTags.includes('true')  // deleted
-      if (filterTags.length > 0) options.selector.tags = {$in: filterTags}
+      // Query deleted news?
+      options.selector.deleted = filterTags.includes('true')
+      if (filterTags.length > 0 && !options.selector.deleted) {
+        options.selector.tags = {$in: filterTags}
+      }
+
       db.find(options).then(res => {
         if (res && res.docs.length > 0) {
           options.selector._id.$gte = res.docs[res.docs.length - 1]._id
           resolve(res.docs)
-        }
+        } else resolve([])
       })
     })
   }
 
   function nextPage () {
     fetchNextPage().then(page => {
+      if (page.length === 0) moreButton.hidden = true
       page.forEach(news => {
         news = news.doc || news
+        // Href: item ID and previous queried tags.
         newsArray.push(
           `<section class="news-item">
             <h1>
-              <a href="item.html?${qs.stringify({id: news._id})}">
+              <a href="item.html?${qs.stringify({id: news._id, q: filterTags})}">
                 ${news.title}
               </a>
             </h1>
@@ -73,11 +80,7 @@
   document.getElementById('more-button').addEventListener('click', nextPage)
   document.getElementById('submitTags').addEventListener('click', _ => {
     let tagsForm = new FormData(document.querySelector('form'))
-
-    for (let [_, v] of tagsForm.entries()) {
-      filterTags.push(v)
-    }
-
+    for (let [_, v] of tagsForm.entries()) filterTags.push(v)
     window.location.replace(`index.html?${qs.stringify(filterTags)}`)
   })
 })()

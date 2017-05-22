@@ -1,9 +1,9 @@
 (function () {
   'use strict'
 
-  const qs = require('querystring')
-
-  let id = qs.parse(window.location.search.slice(1)).id
+  const params = qs.parse(window.location.search.slice(1))
+  const prevQuery = params.q
+  let id = params.id
 
   db.get(id).then(news => {
     let newspage =
@@ -19,13 +19,16 @@
           ${news.press} <code>${news.date}</code>
         </p>
         <p>
-          <input id="news-page__url" type="text" style="width: 100%;" value="${news.url}" disabled></input>
+          <button id="news-page__copy" type="button">复制链接</button>
+          <code id="news-page__url">${news.url}</code>
         </p>
       </section>
       <iframe src="${news.url}" style="width: 100%; height: 66%;"></iframe>
     </div>`
 
     render('news-page', newspage)
+    renderNav(news.tags)
+    if (prevQuery) renderLogoHref(prevQuery)
 
     /* Event listener. */
     document.getElementById('submitTags').addEventListener('click', _ => {
@@ -52,5 +55,12 @@
         }).then(_ => { window.location.reload(true) })
       }).catch(err => { console.err(err) })
     })
-  }).catch(err => { console.error(err) })
+
+    document.getElementById('news-page__copy').addEventListener('click', _ => {
+      copy(document.getElementById('news-page__url').textContent)
+    })
+  }).catch(err => {
+    // Item fetching error.
+    console.error(err)
+  })
 })()
