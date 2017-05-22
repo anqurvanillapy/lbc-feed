@@ -112,8 +112,9 @@ function renderAll (comps) {
 }
 
 // Render the tag navigator with active tags.
-function renderNav (tags) {
+function renderNav (deleted, tags) {
   let tagOptions = document.querySelector('form').elements
+  if (deleted) tagOptions['deleted'].checked = true
   for (let t of tags) tagOptions[t].checked = true
 }
 

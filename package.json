@@ -4,6 +4,7 @@
   "description": "News feed for left-behind children survey (assignment)",
   "main": "index.js",
   "dependencies": {
+    "chart.js": "^2.5.0",
     "copy-text-to-clipboard": "^1.0.0",
     "pouchdb-browser": "^6.2.0",
     "pouchdb-find": "^6.2.0",
