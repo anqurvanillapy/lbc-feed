@@ -25,12 +25,12 @@ const TAGSTBL = {
 
   // topic
   // - topicHelp
-  topicHelp: '社会各界帮助关爱',
   topicHelpDonation: '帮助新闻种类/单纯一次捐款捐物',
   topicHelpTravel: '帮助新闻种类/旅游活动安排',
   topicHelpFree: '帮助新闻种类/免费开放',
   topicHelpFunding: '帮助新闻种类/设立长期资助项目',
   topicHelpMisc: '帮助新闻种类/其他',
+  // - topicHelpyBy
   topicHelpByGovernment: '帮助新闻主体/政府',
   topicHelpByEnterprise: '帮助新闻主体/企业',
   topicHelpByInstitution: '帮助新闻主体/事业单位',
@@ -39,26 +39,22 @@ const TAGSTBL = {
   // - topicOpinion
   topicOpinion: '社会各界看法及建议',
   // - topicCommend
-  topicCommend: '表彰单位或个人',
   topicCommendGovernment: '表彰新闻主体/政府',
   topicCommendEnterprise: '表彰新闻主体/企业',
   topicCommendInstitution: '表彰新闻主体/事业单位',
   topicCommendCharity: '表彰新闻主体/公益团体',
   topicCommendPersonal: '表彰新闻主体/个人',
   // - topicViolence
-  topicViolence: '留守儿童遭受暴力',
   topicViolenceMale: '遭受暴力/男',
   topicViolenceFemale: '遭受暴力/女',
   topicViolenceUnknown: '遭受暴力/性别未提及',
   // - topicSex
-  topicSex: '留守儿童遭受性侵犯',
   topicSexMale: '遭受性侵犯/男',
   topicSexFemale: '遭受性侵犯/女',
   topicSexUnknown: '遭受性侵犯/性别未提及',
   // - topicCriminal
   topicCriminal: '留守儿童犯罪',
   // - topicDeath
-  topicDeath: '留守儿童意外死亡/男',
   topicDeathMale: '意外死亡/男',
   topicDeathFemale: '意外死亡/女',
   topicDeathUnknown: '意外死亡/性别未提及',
@@ -80,7 +76,6 @@ const TAGSTBL = {
   srcMisc: '其他来源',
 
   // pubimg
-  pubimgPositive: '积极健康',
   pubimgPositiveMale: '积极健康/男',
   pubimgPositiveFemale: '积极健康/女',
   pubimgPositiveUnknown: '积极健康/性别未提及',
@@ -94,7 +89,7 @@ const TAGSTBL = {
   eduFee: '私立学校学费高',
   eduQuality: '私立学校教学质量没保障',
   eduQualification: '越来越多私立学校被国家取消办学资格',
-  eduMisc: '其他'
+  eduMisc: '其他教育原因'
 }
 
 /* Components rendering. */

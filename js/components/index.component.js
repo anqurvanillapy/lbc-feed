@@ -59,6 +59,7 @@ function nextPage () {
     })
 
     render('news-list', newsArray.join(''))
+    setTopicConstraint()
   })
 }
 

@@ -31,18 +31,24 @@ db.get(id).then(news => {
     'menu__nav-form': allTagsForm
   })
   renderNav(news.deleted, news.tags)
+  setTopicConstraint()
   if (prevQuery) renderLogoHref(prevQuery)
 
-  /* Event listener. */
+  /* Event listeners. */
   document.getElementById('submitTags').addEventListener('click', _ => {
     let tagsForm = new FormData(document.querySelector('form'))
     let tags = []
     let deleted
 
     // User must fill in all the blanks.
-    for (let ty of ['press', 'type', 'topic', 'src', 'pubimg', 'edu']) {
-      if (!tagsForm.has(ty)) return
+    const blanks = ['press', 'type', 'src', 'pubimg', 'edu']
+    for (let ty of blanks) {
+      if (!tagsForm.has(ty) && !tagsForm.has('deleted')) return
     }
+
+    if (!tagsForm.has('deleted') &&
+      !tagsForm.has('topic') &&
+      !(tagsForm.has('topicHelp') && tagsForm.has('topicHelpBy'))) return
 
     // Previous stats.
     let prevStats = {}
@@ -53,11 +59,14 @@ db.get(id).then(news => {
 
     // Update the tags.
     for (let [k, v] of tagsForm.entries()) {
-      if (k === 'deleted' && v === 'true') deleted = true
-      else tags.push(v)
+      // Once deleted, tags not available.
+      if (k === 'deleted' && v === 'true') {
+        deleted = true
+        tags = []
+        break
+      } else tags.push(v)
     }
 
-    // TODO: stats & hidden options.
     db.get(id).then(doc => {
       return db.put({
         _id: id,
@@ -72,7 +81,8 @@ db.get(id).then(news => {
       }).then(_ => {
         db.get('stats').then(doc => {
           // Update the stats.
-          doc.deleted = (deleted) ? doc.deleted + 1 : doc.deleted - 1
+          doc.deleted -= prevStats.deleted
+          if (deleted) ++doc.deleted
           Object.keys(doc).forEach(k => {
             if (k === '_id' || k === '_rev' || k === 'deleted') return
             doc[k] -= prevStats[k]
@@ -91,7 +101,7 @@ db.get(id).then(news => {
           _stats.deleted = (deleted) ? 1 : 0
           _stats._id = 'stats'
 
-          return db.put(prevStats).then(_ => {
+          return db.put(_stats).then(_ => {
             window.location.reload(true)
           })
         })

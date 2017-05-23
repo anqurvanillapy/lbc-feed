@@ -45,146 +45,151 @@ const allTagsForm =
   <li><h4>报道主题</h4>
     <ul>
       <li>
-          <input id="topicHelp" type="radio" name="topic" value="topicHelp"></input>
-          <label for="topicHelp">社会各界帮助关爱</label>
-        <ul id="topicHelpSub">
-          <li>种类
-            <ul>
-              <li>
-                <input id="topicHelpDonation" type="radio" name="topicHelp" value="topicHelpDonation"></input>
-                <label for="topicHelpDonation">单纯一次捐款捐物</label>
-              </li>
-              <li>
-                <input id="topicHelpTravel" type="radio" name="topicHelp" value="topicHelpTravel"></input>
-                <label for="topicHelpTravel">旅游活动安排</label>
-              </li>
-              <li>
-                <input id="topicHelpFree" type="radio" name="topicHelp" value="topicHelpFree"></input>
-                <label for="topicHelpFree">免费开放</label>
-              </li>
-              <li>
-                <input id="topicHelpFunding" type="radio" name="topicHelp" value="topicHelpFunding"></input>
-                <label for="topicHelpFunding">设立长期资助项目</label>
-              </li>
-              <li>
-                <input id="topicHelpMisc" type="radio" name="topicHelp" value="topicHelpMisc"></input>
-                <label for="topicHelpMisc">其他</label>
-              </li>
-            </ul>
-          </li>
-          <li>主体
-            <ul>
-              <li>
-                <input id="topicHelpByGovernment" type="radio" name="topicHelpBy" value="topicHelpByGovernment"></input>
-                <label for="topicHelpByGovernment">政府</label>
-              </li>
-              <li>
-                <input id="topicHelpByEnterprise" type="radio" name="topicHelpBy" value="topicHelpByEnterprise"></input>
-                <label for="topicHelpByEnterprise">企业</label>
-              </li>
-              <li>
-                <input id="topicHelpByInstitution" type="radio" name="topicHelpBy" value="topicHelpByInstitution"></input>
-                <label for="topicHelpByInstitution">事业单位</label>
-              </li>
-              <li>
-                <input id="topicHelpByCharity" type="radio" name="topicHelpBy" value="topicHelpByCharity"></input>
-                <label for="topicHelpByCharity">公益团体</label>
-              </li>
-              <li>
-                <input id="topicHelpByPersonal" type="radio" name="topicHelpBy" value="topicHelpByPersonal"></input>
-                <label for="topicHelpByPersonal">个人</label>
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <details>
+          <summary>社会各界帮助关爱</summary>
+          <ul>
+            <li>种类
+              <ul>
+                <li>
+                  <input id="topicHelpDonation" type="radio" name="topicHelp" value="topicHelpDonation"></input>
+                  <label for="topicHelpDonation">单纯一次捐款捐物</label>
+                </li>
+                <li>
+                  <input id="topicHelpTravel" type="radio" name="topicHelp" value="topicHelpTravel"></input>
+                  <label for="topicHelpTravel">旅游活动安排</label>
+                </li>
+                <li>
+                  <input id="topicHelpFree" type="radio" name="topicHelp" value="topicHelpFree"></input>
+                  <label for="topicHelpFree">免费开放</label>
+                </li>
+                <li>
+                  <input id="topicHelpFunding" type="radio" name="topicHelp" value="topicHelpFunding"></input>
+                  <label for="topicHelpFunding">设立长期资助项目</label>
+                </li>
+                <li>
+                  <input id="topicHelpMisc" type="radio" name="topicHelp" value="topicHelpMisc"></input>
+                  <label for="topicHelpMisc">其他</label>
+                </li>
+              </ul>
+            </li>
+            <li>主体
+              <ul>
+                <li>
+                  <input id="topicHelpByGovernment" type="radio" name="topicHelpBy" value="topicHelpByGovernment"></input>
+                  <label for="topicHelpByGovernment">政府</label>
+                </li>
+                <li>
+                  <input id="topicHelpByEnterprise" type="radio" name="topicHelpBy" value="topicHelpByEnterprise"></input>
+                  <label for="topicHelpByEnterprise">企业</label>
+                </li>
+                <li>
+                  <input id="topicHelpByInstitution" type="radio" name="topicHelpBy" value="topicHelpByInstitution"></input>
+                  <label for="topicHelpByInstitution">事业单位</label>
+                </li>
+                <li>
+                  <input id="topicHelpByCharity" type="radio" name="topicHelpBy" value="topicHelpByCharity"></input>
+                  <label for="topicHelpByCharity">公益团体</label>
+                </li>
+                <li>
+                  <input id="topicHelpByPersonal" type="radio" name="topicHelpBy" value="topicHelpByPersonal"></input>
+                  <label for="topicHelpByPersonal">个人</label>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </detail>
       </li>
       <li>
         <input id="topicOpinion" type="radio" name="topic" value="topicOpinion"></input>
         <label for="topicOpinion">社会各界看法及建议</label>
       </li>
       <li>
-        <input id="topicCommend" type="radio" name="topic" value="topicCommend"></input>
-        <label for="topicCommend">表彰单位或个人</label>
-        <ul id="topicCommendSub">
-          <li>
-            <input id="topicCommendGovernment" type="radio" name="topicCommend" value="topicCommendGovernment"></input>
-            <label for="topicCommendGovernment">政府</label>
-          </li>
-          <li>
-            <input id="topicCommendEnterprise" type="radio" name="topicCommend" value="topicCommendEnterprise"></input>
-            <label for="topicCommendEnterprise">企业</label>
-          </li>
-          <li>
-            <input id="topicCommendInstitution" type="radio" name="topicCommend" value="topicCommendInstitution"></input>
-            <label for="topicCommendInstitution">事业单位</label>
-          </li>
-          <li>
-            <input id="topicCommendCharity" type="radio" name="topicCommend" value="topicCommendCharity"></input>
-            <label for="topicCommendCharity">公益团体</label>
-          </li>
-          <li>
-            <input id="topicCommendPersonal" type="radio" name="topicCommend" value="topicCommendPersonal"></input>
-            <label for="topicCommendPersonal">个人</label>
-          </li>
-        </ul>
+        <details>
+          <summary>表彰单位或个人</summary>
+          <ul>
+            <li>
+              <input id="topicCommendGovernment" type="radio" name="topic" value="topicCommendGovernment"></input>
+              <label for="topicCommendGovernment">政府</label>
+            </li>
+            <li>
+              <input id="topicCommendEnterprise" type="radio" name="topic" value="topicCommendEnterprise"></input>
+              <label for="topicCommendEnterprise">企业</label>
+            </li>
+            <li>
+              <input id="topicCommendInstitution" type="radio" name="topic" value="topicCommendInstitution"></input>
+              <label for="topicCommendInstitution">事业单位</label>
+            </li>
+            <li>
+              <input id="topicCommendCharity" type="radio" name="topic" value="topicCommendCharity"></input>
+              <label for="topicCommendCharity">公益团体</label>
+            </li>
+            <li>
+              <input id="topicCommendPersonal" type="radio" name="topic" value="topicCommendPersonal"></input>
+              <label for="topicCommendPersonal">个人</label>
+            </li>
+          </ul>
+        </details>
       </li>
       <li>
-        <input id="topicViolence" type="radio" name="topic" value="topicViolence"></input>
-        <label for="topicViolence">留守儿童遭受暴力</label>
-        <ul id="topicViolenceSub">
-          <li>
-            <input id="topicViolenceMale" type="radio" name="topicViolence" value="topicViolenceMale"></input>
-            <label for="topicViolenceMale">男</label>
-          </li>
-          <li>
-            <input id="topicViolenceFemale" type="radio" name="topicViolence" value="topicViolenceFemale"></input>
-            <label for="topicViolenceFemale">女</label>
-          </li>
-          <li>
-            <input id="topicViolenceUnknown" type="radio" name="topicViolence" value="topicViolenceUnknown"></input>
-            <label for="topicViolenceUnknown">未提及</label>
-          </li>
-        </ul>
+        <details>
+          <summary>留守儿童遭受暴力</summary>
+          <ul>
+            <li>
+              <input id="topicViolenceMale" type="radio" name="topic" value="topicViolenceMale"></input>
+              <label for="topicViolenceMale">男</label>
+            </li>
+            <li>
+              <input id="topicViolenceFemale" type="radio" name="topic" value="topicViolenceFemale"></input>
+              <label for="topicViolenceFemale">女</label>
+            </li>
+            <li>
+              <input id="topicViolenceUnknown" type="radio" name="topic" value="topicViolenceUnknown"></input>
+              <label for="topicViolenceUnknown">未提及</label>
+            </li>
+          </ul>
+        </details>
       </li>
       <li>
-        <input id="topicSex" type="radio" name="topic" value="topicSex"></input>
-        <label for="topicSex">留守儿童遭受性侵犯</label>
-        <ul id="topicSexSub">
-          <li>
-            <input id="topicSexMale" type="radio" name="topicSex" value="topicSexMale"></input>
-            <label for="topicSexMale">男</label>
-          </li>
-          <li>
-            <input id="topicSexFemale" type="radio" name="topicSex" value="topicSexFemale"></input>
-            <label for="topicSexFemale">女</label>
-          </li>
-          <li>
-            <input id="topicSexUnknown" type="radio" name="topicSex" value="topicSexUnknown"></input>
-            <label for="topicSexUnknown">未提及</label>
-          </li>
-        </ul>
+        <details>
+          <summary>留守儿童遭受性侵犯</summary>
+          <ul>
+            <li>
+              <input id="topicSexMale" type="radio" name="topic" value="topicSexMale"></input>
+              <label for="topicSexMale">男</label>
+            </li>
+            <li>
+              <input id="topicSexFemale" type="radio" name="topic" value="topicSexFemale"></input>
+              <label for="topicSexFemale">女</label>
+            </li>
+            <li>
+              <input id="topicSexUnknown" type="radio" name="topic" value="topicSexUnknown"></input>
+              <label for="topicSexUnknown">未提及</label>
+            </li>
+          </ul>
+        </details>
       </li>
       <li>
         <input id="topicCriminal" type="radio" name="topic" value="topicCriminal"></input>
         <label for="topicCriminal">留守儿童犯罪</label>
       </li>
       <li>
-        <input id="topicDeath" type="radio" name="topic" value="topicDeath"></input>
-        <label for="topicDeath">留守儿童意外死亡</label>
-        <ul id="topicDeathSub">
-          <li>
-            <input id="topicDeathMale" type="radio" name="topicDeath" value="topicDeathMale"></input>
-            <label for="topicDeathMale">男</label>
-          </li>
-          <li>
-            <input id="topicDeathFemale" type="radio" name="topicDeath" value="topicDeathFemale"></input>
-            <label for="topicDeathFemale">女</label>
-          </li>
-          <li>
-            <input id="topicDeathUnknown" type="radio" name="topicDeath" value="topicDeathUnknown"></input>
-            <label for="topicDeathUnknown">未提及</label>
-          </li>
-        </ul>
+        <details>
+          <summary>留守儿童意外死亡</summary>
+          <ul>
+            <li>
+              <input id="topicDeathMale" type="radio" name="topic" value="topicDeathMale"></input>
+              <label for="topicDeathMale">男</label>
+            </li>
+            <li>
+              <input id="topicDeathFemale" type="radio" name="topic" value="topicDeathFemale"></input>
+              <label for="topicDeathFemale">女</label>
+            </li>
+            <li>
+              <input id="topicDeathUnknown" type="radio" name="topic" value="topicDeathUnknown"></input>
+              <label for="topicDeathUnknown">未提及</label>
+            </li>
+          </ul>
+        </details>
       </li>
       <li>
         <input id="topicPositive" type="radio" name="topic" value="topicPositive"></input>
@@ -239,22 +244,23 @@ const allTagsForm =
   <li><h4>媒介形象呈现</h4>
     <ul>
       <li>
-        <input id="pubimgPositive" type="radio" name="pubimg" value="pubimgPositive"></input>
-        <label for="pubimgPositive">积极健康</label>
-        <ul id="pubimgPositiveSub">
-          <li>
-            <input id="pubimgPositiveMale" type="radio" name="pubimgPositive" value="pubimgPositiveMale"></input>
-            <label for="pubimgPositiveMale">男</label>
-          </li>
-          <li>
-            <input id="pubimgPositiveFemale" type="radio" name="pubimgPositive" value="pubimgPositiveFemale"></input>
-            <label for="pubimgPositiveFemale">女</label>
-          </li>
-          <li>
-            <input id="pubimgPositiveUnknown" type="radio" name="pubimgPositive" value="pubimgPositiveUnknown"></input>
-            <label for="pubimgPositiveUnknown">未提及</label>
-          </li>
-        </ul>
+        <details>
+          <summary>积极健康</summary>
+          <ul>
+            <li>
+              <input id="pubimgPositiveMale" type="radio" name="pubimg" value="pubimgPositiveMale"></input>
+              <label for="pubimgPositiveMale">男</label>
+            </li>
+            <li>
+              <input id="pubimgPositiveFemale" type="radio" name="pubimg" value="pubimgPositiveFemale"></input>
+              <label for="pubimgPositiveFemale">女</label>
+            </li>
+            <li>
+              <input id="pubimgPositiveUnknown" type="radio" name="pubimg" value="pubimgPositiveUnknown"></input>
+              <label for="pubimgPositiveUnknown">未提及</label>
+            </li>
+          </ul>
+        </details>
       </li>
       <li>
         <input id="pubimgMiserable" type="radio" name="pubimg" value="pubimgMiserable"></input>
@@ -354,3 +360,28 @@ const spinner =
 `<svg viewBox="0 0 32 32" width="32" height="32">
   <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
 </svg>`
+
+/* Listeners setters. */
+function setTopicConstraint () {
+  // Workaround for tags of topic.
+  let topicHelpGroups = []
+  let topicRestGroups = document.querySelectorAll('input[name="topic"]')
+
+  ;['topicHelp', 'topicHelpBy'].forEach(t => {
+    document.querySelectorAll(`input[name="${t}"]`).forEach(input => {
+      topicHelpGroups.push(input)
+    })
+  })
+
+  topicRestGroups.forEach(rest => {
+    rest.addEventListener('click', _ => {
+      topicHelpGroups.forEach(help => { help.checked = false })
+    })
+  })
+
+  topicHelpGroups.forEach(help => {
+    help.addEventListener('click', _ => {
+      topicRestGroups.forEach(rest => { rest.checked = false })
+    })
+  })
+}
