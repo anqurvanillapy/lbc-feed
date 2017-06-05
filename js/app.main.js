@@ -1,3 +1,6 @@
+const fs = require('fs')
+const url = require('url')
+const path = require('path')
 const qs = require('querystring')
 const copy = require('copy-text-to-clipboard')
 const crypto = require('crypto')
