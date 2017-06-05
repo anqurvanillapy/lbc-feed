@@ -81,12 +81,25 @@ function tabsToggle () {
   submit.addEventListener('click', _ => {
     let form = document.querySelector('form')
 
-    // Simple form validation.  FormData.values() returns an Iterator.
-    let fvals = [... new FormData(form).values()]
-    if (fvals.filter(Boolean).length !== fvals.length) {
-      insertMsg(form, '表格未填写完整')
-      return
+    // Simple form validation.
+    for (let [_, v] of new FormData(form).entries()) {
+      if (!v) {
+        insertMsg(form, '表格未填写完整')
+        return
+      } else if (!/^[a-z0-9]+$/i.test(v)) {
+        insertMsg(form, '用户名或密码包含非英文字符或数字')
+        return
+      }
     }
+
+    // NOTE: Sweet code but does not meet the need now :(.  FormData.values()
+    // returns an Iterator.
+
+    // let fvals = [... new FormData(form).values()]
+    // if (fvals.filter(Boolean).length !== fvals.length) {
+    //   insertMsg(form, '表格未填写完整')
+    //   return
+    // }
 
     if (isSignin) {
       let saltHash = profile[form.username.value]
@@ -104,7 +117,9 @@ function tabsToggle () {
       submit.disabled = true
       insertMsg(form, '登录成功', true)
       console.log('sign in!')
-      setTimeout(_ => { window.location.replace(index) }, 1000)
+      setTimeout(_ => {
+        window.location.replace(`${index}?username=${form.username.value}`)
+      }, 1000)
     } else {
       if (form.password.value !== form.confirm.value) {
         insertMsg(form, '输入的密码不一致')

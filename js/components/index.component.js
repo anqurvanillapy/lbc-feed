@@ -5,9 +5,14 @@ const moreButton = document.getElementById('more-button')
 const loader = document.getElementById('loader')
 
 /* Filters and results. */
+const params = qs.parse(window.location.search.slice(1))
+const username = params.username
+const query = params.q
+
+if (!username) { throw new Error('hey you are not even logged in!') }
+
 let newsArray = []
-let params = qs.parse(window.location.search.slice(1))
-let filterTags = Object.values(params) || []
+let filterTags = (query) ? query.split(',') : []
 console.log(filterTags)
 
 /* Query options for db.find. */
@@ -47,7 +52,11 @@ function nextPage () {
       newsArray.push(
         `<section class="news-item">
           <h1>
-            <a href="item.html?${qs.stringify({id: news._id, q: filterTags})}">
+            <a href="item.html?${qs.stringify({
+              username: username,
+              id: news._id,
+              q: filterTags
+            })}">
               ${news.title}
             </a>
           </h1>
@@ -58,7 +67,11 @@ function nextPage () {
         </section>`)
     })
 
-    render('news-list', newsArray.join(''))
+    renderAll({
+      'news-list': newsArray.join(''),
+      'username': username
+    })
+    renderLogoHref(username)
     setTopicConstraint()
   })
 }
@@ -99,5 +112,7 @@ document.getElementById('submitTags').addEventListener('click', _ => {
     } else filterTags.push(v)
   }
 
-  window.location.replace(`index.html?${qs.stringify(filterTags)}`)
+  window.location.replace(
+    `index.html?q=${filterTags.join()}&username=${username}`
+  )
 })

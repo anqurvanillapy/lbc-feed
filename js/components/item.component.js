@@ -1,7 +1,9 @@
 'use strict'
 
 const params = qs.parse(window.location.search.slice(1))
+console.log(params)
 const prevQuery = params.q
+const username = params.username
 let id = params.id
 
 db.get(id).then(news => {
@@ -28,11 +30,12 @@ db.get(id).then(news => {
   renderAll({
     'news-page': newspage,
     'header': header,
+    'username': username,
     'menu__nav-form': allTagsForm
   })
   renderNav(news.deleted, news.tags)
   setTopicConstraint()
-  if (prevQuery) renderLogoHref(prevQuery)
+  renderLogoHref(username, prevQuery)
 
   /* Event listeners. */
   document.getElementById('submitTags').addEventListener('click', _ => {

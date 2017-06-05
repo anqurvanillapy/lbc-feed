@@ -117,10 +117,10 @@ function renderNav (deleted, tags) {
   for (let t of tags) tagOptions[t].checked = true
 }
 
-// Render logo href for getting back to previous query.
-function renderLogoHref (tags) {
+// Render logo href for getting back to previous query with username.
+function renderLogoHref (un, tags = []) {
   if (typeof tags === 'string') tags = [tags] // might not be an array
-  document.querySelector('#logo a').href += `?${qs.stringify(tags)}`
+  document.querySelector('#logo a').href += `?q=${tags.join()}&username=${un}`
 }
 
 /* Salt hash password. */

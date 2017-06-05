@@ -2,6 +2,7 @@
 
 const allTagsForm =
 `<ul>
+  <li><h3>新闻分类</h3></li>
   <li>
     <input id="deleted" type="checkbox" name="deleted" value="true"></input>
     <label for="deleted">不感兴趣</label>
@@ -340,9 +341,15 @@ const header =
         <span>toggle menu</span>
       </label>
       <nav id="menu__nav">
-        <p style="color: #fff; padding: .5em; margin: 0;">新闻分类</p>
+        <h4 style="color: #fff; padding: .5em; margin: 0;">
+          欢迎，<code id="username"></code>！
+          <br>
+          <a href="login.html" style="color: #fff; font-size: .6em; font-weight: 400;">
+            切换账号
+          </a>
+        </h4>
         <div>
-        <form id="menu__nav-form"></form>
+          <form id="menu__nav-form"></form>
         </div>
         <button id="submitTags" type="button" style="width: 100%; text-align: center; font-size: .8em;">确定</button>
       </nav>
