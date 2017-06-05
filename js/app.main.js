@@ -1,5 +1,6 @@
 const qs = require('querystring')
 const copy = require('copy-text-to-clipboard')
+const crypto = require('crypto')
 
 let PouchDB = require('pouchdb-browser')
 PouchDB.plugin(require('pouchdb-find'))
@@ -117,4 +118,31 @@ function renderNav (deleted, tags) {
 function renderLogoHref (tags) {
   if (typeof tags === 'string') tags = [tags] // might not be an array
   document.querySelector('#logo a').href += `?${qs.stringify(tags)}`
+}
+
+/* Salt hash password. */
+
+// Genetarte salt string.
+function _generateSalt (len) {
+  return crypto.randomBytes(Math.ceil(len / 2)).toString('hex').slice(0, len)
+}
+
+// Hash password with SHA-512.
+function _sha512 (passwd, salt) {
+  let hash = crypto.createHmac('sha512', salt)
+  hash.update(passwd)
+  return hash.digest('hex')
+}
+
+// Generate a password hash.
+function saltHashPassword(passwd) {
+  let salt = _generateSalt(16)
+  return `sha512$${salt}$${_sha512(passwd, salt)}`
+}
+
+// Check a password hash.
+function checkPassword(passwd, saltHash) {
+  let [_hash, salt, hash] = saltHash.split('$')
+  _hash = _sha512(passwd, salt)
+  return hash === _hash
 }
