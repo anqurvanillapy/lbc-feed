@@ -1,6 +1,10 @@
 'use strict'
 
 const Chart = require('chart.js')
+const params = qs.parse(window.location.search.slice(1))
+const username = params.username
+
+if (!username) { throw new Error('hey you are not even logged in!') }
 
 /* Components. */
 const loader = document.getElementById('loader')
@@ -12,6 +16,7 @@ function createChart (stats) {
   // Extract the stats with keyTag.
   let chartLabels = []
   let chartData = []
+
   Object.keys(stats).forEach(k => {
     if (k.indexOf(keyTag) !== -1) {
       chartLabels.push(k)
@@ -55,9 +60,13 @@ renderAll({
   'menu__nav-form': keyTagsForm,
   'loader': spinner
 })
+renderHeaderLinks(username)
 
 /* Listeners. */
 document.getElementById('submitTags').addEventListener('click', _ => {
   const t = document.querySelector('form').stats.value
-  window.location.replace(`stats.html?${qs.stringify({selected: t})}`)
+  window.location.replace(`stats.html?${qs.stringify({
+    selected: t,
+    username: username
+  })}`)
 })

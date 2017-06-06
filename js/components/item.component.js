@@ -1,15 +1,15 @@
 'use strict'
 
 const params = qs.parse(window.location.search.slice(1))
-console.log(params)
 const prevQuery = params.q
 const username = params.username
 let id = params.id
 
 db.get(id).then(news => {
+  let tags = news.tags[username] || []
   let newspage =
   `<div style="width: 100%; height: 100%; padding: 0 .5em;">
-    <p>${news.tags.map(t => {
+    <p>${tags.map(t => {
       return `<a class="news-page__tags" href="#">${TAGSTBL[t]}</a>`
     }).join('')}</p>
     <h1 id="news-page__title" style="margin: 0;">${news.title}
@@ -33,15 +33,16 @@ db.get(id).then(news => {
     'username': username,
     'menu__nav-form': allTagsForm
   })
-  renderNav(news.deleted, news.tags)
+  renderNav(news.deleted, tags)
+  document.getElementById('superuser-filter').hidden = true // only for search
   setTopicConstraint()
-  renderLogoHref(username, prevQuery)
+  renderHeaderLinks(username, prevQuery)
 
   /* Event listeners. */
   document.getElementById('submitTags').addEventListener('click', _ => {
     let tagsForm = new FormData(document.querySelector('form'))
     let tags = []
-    let deleted
+    let deleted = false
 
     // User must fill in all the blanks.
     const blanks = ['press', 'type', 'src', 'pubimg', 'edu']
@@ -56,7 +57,7 @@ db.get(id).then(news => {
     // Previous stats.
     let prevStats = {}
     Object.keys(TAGSTBL).forEach(k => {
-      if (news.tags.includes(k)) prevStats[k] = 1; else prevStats[k] = 0
+      if (tags.includes(k)) prevStats[k] = 1; else prevStats[k] = 0
     })
     prevStats.deleted = (news.deleted) ? 1 : 0  // override deleted count
 
@@ -71,6 +72,9 @@ db.get(id).then(news => {
     }
 
     db.get(id).then(doc => {
+      let _tags = doc.tags
+      _tags[username] = tags  // update user tags
+
       return db.put({
         _id: id,
         _rev: doc._rev,
@@ -79,8 +83,8 @@ db.get(id).then(news => {
         url: doc.url,
         press: doc.press,
         content: doc.content,
-        deleted: deleted || false,
-        tags: tags
+        deleted: deleted,
+        tags: _tags
       }).then(_ => {
         db.get('stats').then(doc => {
           // Update the stats.

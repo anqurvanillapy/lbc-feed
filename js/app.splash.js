@@ -87,7 +87,7 @@ function putItemSync (news, cb) {
     _id: news.ID[0],
     title: news.Title[0],
     date: news.Date[0],
-    tags: [],
+    tags: {$$$: []},
     url: news.TrueUrl[0] || '',
     press: news.Location[0],
     content: news.EncodedContent[0] || '',

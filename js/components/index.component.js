@@ -13,6 +13,7 @@ if (!username) { throw new Error('hey you are not even logged in!') }
 
 let newsArray = []
 let filterTags = (query) ? query.split(',') : []
+const is$$$ = filterTags.includes('$$$')
 console.log(filterTags)
 
 /* Query options for db.find. */
@@ -29,8 +30,14 @@ function fetchNextPage () {
   return new Promise((resolve, reject) => {
     // Query deleted news?
     options.selector.deleted = filterTags.includes('deleted')
+
+    // Query superuser?
+    let si = filterTags.indexOf('$$$')
+    let user = (si > -1) ? '$$$' : username
+    filterTags.splice(si, !!(si > -1) * 1)
+
     if (filterTags.length > 0 && !options.selector.deleted) {
-      options.selector.tags = {$in: filterTags}
+      options.selector[`tags.${user}`] = {$in: filterTags}
     }
 
     db.find(options).then(res => {
@@ -45,9 +52,13 @@ function fetchNextPage () {
 function nextPage () {
   fetchNextPage().then(page => {
     loader.hidden = true
-    if (page.length === 0) moreButton.hidden = true
+    if (!page.length) moreButton.hidden = true
+
     page.forEach(news => {
       news = news.doc || news
+      let tags = (is$$$) ? news.tags['$$$'] : news.tags[username] || []
+      let tc = (is$$$) ? 'style="color: crimson;"' : ''  // tag color
+
       // Href: item ID and previous queried tags.
       newsArray.push(
         `<section class="news-item">
@@ -61,8 +72,8 @@ function nextPage () {
             </a>
           </h1>
           <p>${news.press} <code>${news.date}</code></p>
-          <p>${news.tags.map(t => {
-            return `<a class="news-item__tags" href="#">${TAGSTBL[t]}</a>`
+          <p>${tags.map(t => {
+            return `<a class="news-item__tags" ${tc} href="#">${TAGSTBL[t]}</a>`
           }).join('')}</p>
         </section>`)
     })
@@ -71,7 +82,7 @@ function nextPage () {
       'news-list': newsArray.join(''),
       'username': username
     })
-    renderLogoHref(username)
+    renderHeaderLinks(username)
     setTopicConstraint()
   })
 }
@@ -82,14 +93,14 @@ db.allDocs({ limit: 0 }).then(res => {
   `<li>共为您找到 ${res.total_rows - 1} 条新闻</li>
   <li>
     <span>当前筛选: </span>
-    <span>${(filterTags.length > 0) ? filterTags.map(t => {
-      return TAGSTBL[t]
-    }) : '无'}</span>
+    <span>${
+      (filterTags.length > 0 && !is$$$) ? filterTags.map(t => TAGSTBL[t]) : '无'
+    }</span>
   </li>`
 
   nextPage()
   render('main-statusbar', statusbar)
-}).catch(err => { console.error(err) })
+})
 
 renderAll({
   'header': header,

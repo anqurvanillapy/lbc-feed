@@ -54,7 +54,7 @@ function tabsToggle () {
     `<form>
       <div>
         <label for="username">用户名</label>
-        <input type="text" name="username">
+        <input type="text" name="username" autofocus>
       <div/>
       <div>
         <label for="password">密码</label>
@@ -146,9 +146,36 @@ function tabsToggle () {
 
 function insertMsg (root, msg, isSuccess) {
   let elem = document.getElementById('errmsg')
-  let color = (isSuccess) ? 'forestgreen' : 'maroon'
+  let color = (isSuccess) ? 'forestgreen' : 'crimson'
 
   if (elem) root.removeChild(elem)
   elem = `<p id="errmsg" style="color: ${color};"><em>${msg}</em></p>`
   root.insertAdjacentHTML('beforeend', elem)
+}
+
+/* Salt hash password. */
+
+// Genetarte salt string.
+function _generateSalt (len) {
+  return crypto.randomBytes(Math.ceil(len / 2)).toString('hex').slice(0, len)
+}
+
+// Hash password with SHA-512.
+function _sha512 (passwd, salt) {
+  let hash = crypto.createHmac('sha512', salt)
+  hash.update(passwd)
+  return hash.digest('hex')
+}
+
+// Generate a password hash.
+function saltHashPassword(passwd) {
+  let salt = _generateSalt(16)
+  return `sha512$${salt}$${_sha512(passwd, salt)}`
+}
+
+// Check a password hash.
+function checkPassword(passwd, saltHash) {
+  let [_hash, salt, hash] = saltHash.split('$')
+  _hash = _sha512(passwd, salt)
+  return hash === _hash
 }
