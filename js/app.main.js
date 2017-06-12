@@ -5,13 +5,18 @@ const qs = require('querystring')
 const copy = require('copy-text-to-clipboard')
 const crypto = require('crypto')
 
+/* Database instance. */
+
 let PouchDB = require('pouchdb-browser')
 PouchDB.plugin(require('pouchdb-find'))
-
-/* Database instance. */
 let db = new PouchDB('lbc-feed-db')
 
+/* User profile */
+
+const PROFILE_DIR_PATH = path.join(require('os').homedir(), '.lbc-feed')
+
 /* Tags table. */
+
 const TAGSTBL = {
   // deleted
   deleted: '不感兴趣',

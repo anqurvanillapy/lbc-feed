@@ -5,15 +5,15 @@ const path = require('path')
 const url = require('url')
 
 let win
-let splash = url.format({
-  pathname: `${path.join(__dirname, 'splash')}.html`,
+let login = url.format({
+  pathname: `${path.join(__dirname, 'login')}.html`,
   protocol: 'file:',
   slashes: true
 })
 
 function createWindow () {
   win = new BrowserWindow({ width: 800, height: 600 })
-  win.loadURL(splash)
+  win.loadURL(login)
   win.webContents.openDevTools()
   win.on('closed', _ => {
     win = null

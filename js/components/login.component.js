@@ -1,6 +1,8 @@
 'use strict'
 
-let [login, index] = ['login', 'index'].map(p => url.format({
+/* Paths. */
+
+let [login, importXML] = ['login', 'import'].map(p => url.format({
   pathname: `${path.join(__dirname, p)}.html`,
   protocol: 'file:',
   slashes: true
@@ -8,16 +10,15 @@ let [login, index] = ['login', 'index'].map(p => url.format({
 
 /* User profile. */
 
-const homedir = require('os').homedir
-const fpath = path.join(homedir(), '.lbc-feed')
-
+const profilePath = path.join(PROFILE_DIR_PATH, 'profile.json')
 let profile
 
 try {
-  profile = JSON.parse(fs.readFileSync(fpath))
+  profile = JSON.parse(fs.readFileSync(profilePath))
 } catch (e) {
   profile = {}
-  fs.writeFileSync(fpath, JSON.stringify(profile) + '\n')
+  try { fs.mkdirSync(PROFILE_DIR_PATH) } catch(e) { /* nop */ }
+  fs.writeFileSync(profilePath, JSON.stringify(profile) + '\n')
 }
 
 /* Templates. */
@@ -52,6 +53,8 @@ function tabsToggle () {
 
   const form =
     `<form>
+      <h1>LBC Feed</h1>
+      <p>News Feed For Left-behind Children Survey.</p>
       <div>
         <label for="username">用户名</label>
         <input type="text" name="username" autofocus>
@@ -118,7 +121,7 @@ function tabsToggle () {
       insertMsg(form, '登录成功', true)
       console.log('sign in!')
       setTimeout(_ => {
-        window.location.replace(`${index}?username=${form.username.value}`)
+        window.location.replace(`${importXML}?username=${form.username.value}`)
       }, 1000)
     } else {
       if (form.password.value !== form.confirm.value) {
@@ -132,7 +135,7 @@ function tabsToggle () {
       }
 
       profile[form.username.value] = saltHashPassword(form.password.value)
-      fs.writeFileSync(fpath, JSON.stringify(profile) + '\n')
+      fs.writeFileSync(profilePath, JSON.stringify(profile) + '\n')
       submit.disabled = true
       insertMsg(form, '注册成功', true)
       console.log('sign up!')
