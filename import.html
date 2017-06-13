@@ -25,7 +25,7 @@
   }
     body.active {
       opacity: 1;
-      transition: 3s cubic-bezier(0.075, 0.82, 0.165, 1);
+      transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
     }
 
   button {
@@ -39,6 +39,10 @@
   #import-list {
     width: 50%;
   }
+    #import-list.active {
+      transform: translateX(5%);
+      transition: 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
     #import-button,
     #index-button {
       margin: .5em auto;
@@ -51,24 +55,6 @@
     }
 
     #errmsg, #xml-list { font-family: monospace; }
-
-  #loading { width: 100%; }
-    #totalbar {
-      width: 100%;
-      text-align: center;
-    }
-      #subdonebar {
-        width: 70%;
-        height: 1em;
-        margin: 0 auto;
-        border-radius: 2px;
-        box-shadow: 0 0 2px #777;
-      }
-        #subdone {
-          width: 0;
-          height: 100%;
-          background: royalblue;
-        }
   </style>
 </head>
 <body>
@@ -77,9 +63,8 @@
     <ul id="xml-list"></ul>
     <p id="errmsg"></p>
     <button id="import-button" type="button">添加 XML 文件</button>
-    <button id="index-button" type="button">开始导入</button>
+    <button id="index-button" type="button">开始分类</button>
   </div>
-  <div id="loading"></div>
   <script src="js/app.main.js"></script>
   <script src="js/components/import.component.js"></script>
 </body>

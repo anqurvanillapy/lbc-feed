@@ -1,5 +1,7 @@
 'use strict'
 
+const xml2js = require('xml2js')
+
 /* Components. */
 const moreButton = document.getElementById('more-button')
 const loader = document.getElementById('loader')

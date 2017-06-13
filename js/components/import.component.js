@@ -1,7 +1,11 @@
 'use strict'
 
-const xml2js = require('xml2js')
 const { dialog } = require('electron').remote
+
+/* Profile. */
+
+const params = qs.parse(window.location.search.slice(1))
+const username = params.username
 
 /* Paths. */
 
@@ -13,15 +17,17 @@ let [login, index] = ['login', 'index'].map(p => url.format({
 
 /* Entry point. */
 
-let xmls
+let xmls, _xmls
 let isXML = f => path.extname(f) === '.xml'
+
+try { fs.mkdirSync(PROFILE_DIR_PATH) } catch (e) { /* nop */ }
 
 try {
   xmls = new Set(fs.readdirSync(PROFILE_DIR_PATH).filter(isXML))
+  _xmls = new Set([...xmls.values()]) // Set is mutable
   console.log(xmls)
 } catch (e) {
   console.error(e)
-  // window.location.replace(login)
 }
 
 document.body.classList.add('active') // fade-in
@@ -30,18 +36,6 @@ updateXMLList()
 /* Components. */
 
 let errmsg = document.getElementById('errmsg')
-const loadingView =
-  `<div id="subdonebar"><div id="subdone"></div></div>
-  <p id="totalbar" style="color: #999; font-family: monospace">
-    Loading...
-    <span id="done">0</span> / <span id="total"></span>
-  </p>`
-
-// Progressbar component.
-let subtotal, subdone
-let total, done
-subtotal = subdone = total = done = 0
-let totalSpan, doneSpan, subdoneDiv, totalBar
 
 /* Listeners. */
 
@@ -60,63 +54,29 @@ document.getElementById('import-button').addEventListener('click', _ => {
 
 document.getElementById('index-button').addEventListener('click', _ => {
   let xmlArray = [...xmls]
+  let i = 0
+
   if (xmlArray.length) {
+    let diff = xmlArray.filter(x => !_xmls.has(path.basename(x)))
+
     console.log(xmlArray)
+    console.log(_xmls)
+    console.log(diff)
+    if (diff.length) cpXMLs(diff)
+    document.getElementById('import-list').classList.add('active')
 
-    // Updates loading views.
-    document.body.removeChild(document.getElementById('import-list'))
-    render('loading', loadingView)
-    ;[totalSpan, doneSpan, subdoneDiv, totalBar] = [
-      'total',
-      'done',
-      'subdone',
-      'totalbar'
-    ].map(id => { return document.getElementById(id) })
+    let fakeProgress = setInterval(_ => {
+      render('import-list', `<h1>${++i} %<h1>`)
 
-    db.get('xmls').then(doc => {
-      let _xmls = new Set(doc.data)
-      let diff = xmlArray.filter(x => !_xmls.has(path.basename(x)))
-      total = diff.length
-
-      if (total) {
-        totalSpan.textContent = total
-
-        db.put({
-          _id: doc._id,
-          _rev: doc._rev,
-          data: xmlArray.map(f => path.basename(f))
-        }).then(_ => {
-          console.log('Updating database...')
-          loadXMLs(diff).then(_ => {
-            console.log('New XMLs updated...')
-            cpXMLs(diff).then(_ => {
-              redirect()
-            })
-          })
-        })
-      } else {
-        console.log('cache hit!')
-        subdone = subtotal = 1
-        updateSubdone()
-        redirect()
+      if (i === 100) {
+        clearInterval(fakeProgress)
+        render('import-list', `<h1>${i} % √<h1>`)
+        setTimeout(_ => {
+          window.location.replace(`${index}?username=${username}`)
+        }, 800)
       }
-    }).catch(_ => {
-      total = xmlArray.length
-      totalSpan.textContent = total
+    }, 5)
 
-      console.log('Initializing database...')
-      db.put({
-        _id: 'xmls',
-        data: xmlArray.map(f => path.basename(f))
-      }).then(_ => {
-        loadXMLs(xmlArray).then(_ => {
-          console.log('Initial XMLs imported...')
-          cpXMLs(xmlArray).then(_ => {
-            redirect()
-          })
-        })
-      })
-    })
   } else {
     errmsg.textContent = '请添加至少一个 XML 文件!'
   }
@@ -139,79 +99,11 @@ function updateXMLList (files) {
   })
 }
 
-/* Load XML files. */
-
-function loadXMLs (xmls) {
-  return new Promise(resolve => {
-    let xmlsPromises = xmls.reduce((chain, xml) => {
-      return chain.then(_ => new Promise(resolve => {
-        parseXMLSync(xml, resolve)
-      }))
-    }, Promise.resolve())
-
-    xmlsPromises.then(_ => { resolve() })
-  })
-}
-
-function parseXMLSync (xml, cb) {
-  let parser = new xml2js.Parser()
-  let data = fs.readFileSync(xml)
-
-  parser.parseString(data, (err, result) => {
-    if (err) return console.error(err)
-
-    let newsArray = result.ArrayOfNewsData.NewsData
-    if (!newsArray) {
-      totalSpan.textContent = --total
-      cb()
-    }
-
-    subdone = 0
-    subtotal = newsArray.length
-
-    let newsPromises = newsArray.reduce((chain, news) => {
-      return chain.then(_ => new Promise(resolve => {
-        putItemSync(news, resolve)
-      }))
-    }, Promise.resolve())
-
-    newsPromises.then(_ => {
-      cb()
-      updateDone()
-    })
-  })
-}
-
-function putItemSync (news, cb) {
-  db.put({
-    _id: news.ID[0],
-    title: news.Title[0],
-    date: news.Date[0],
-    tags: {$$$: []},
-    url: news.TrueUrl[0] || '',
-    press: news.Location[0],
-    content: news.EncodedContent[0] || ''
-  }).then(_ => {
-    updateSubdone()
-    cb()
-  }).catch(err => { console.error(err) })
-}
-
-/* Progressbar */
-
-function updateDone () {
-  doneSpan.textContent = ++done
-}
-
-function updateSubdone () {
-  subdoneDiv.style.width = subdone++ / subtotal * 100 + '%'
-}
-
 /* Copy XMLs to profile directory and redirect to index. */
 
 function cpXMLs (files) {
   return new Promise((resolve, reject) => {
-    let pfiles = files.map(f => new Promise((res, rej) => {
+    let pfiles = files.map(f => new Promise((resolve, reject) => {
       fs.createReadStream(f)
         .pipe(
           fs.createWriteStream(
@@ -219,18 +111,9 @@ function cpXMLs (files) {
           )
         )
 
-      res()
-     }))
+      resolve()
+    }))
 
     Promise.all(pfiles).then(_ => { resolve() })
-  })
-}
-
-function redirect () {
-  db.createIndex({index: {fields: ['tags']}}).then(_ => {
-    totalBar.innerHTML = 'Welcome :)'
-    setTimeout(_ => {
-      window.location.replace(index)
-    }, 800)
   })
 }

@@ -10,16 +10,17 @@ let [login, importXML] = ['login', 'import'].map(p => url.format({
 
 /* User profile. */
 
-const profilePath = path.join(PROFILE_DIR_PATH, 'profile.json')
 let profile
 
-try {
-  profile = JSON.parse(fs.readFileSync(profilePath))
-} catch (e) {
+db.get('users').then(doc => {
+  profile = doc.data
+}).catch(_ => {
+  db.put({
+    _id: 'users',
+    data: {}
+  })
   profile = {}
-  try { fs.mkdirSync(PROFILE_DIR_PATH) } catch(e) { /* nop */ }
-  fs.writeFileSync(profilePath, JSON.stringify(profile) + '\n')
-}
+})
 
 /* Templates. */
 
@@ -135,11 +136,18 @@ function tabsToggle () {
       }
 
       profile[form.username.value] = saltHashPassword(form.password.value)
-      fs.writeFileSync(profilePath, JSON.stringify(profile) + '\n')
-      submit.disabled = true
-      insertMsg(form, '注册成功', true)
-      console.log('sign up!')
-      setTimeout(_ => { window.location.replace(login) }, 1000)
+      db.get('users').then(doc => {
+        db.put({
+          _id: doc._id,
+          _rev: doc._rev,
+          data: profile
+        }).then(_ => {
+          submit.disabled = true
+          insertMsg(form, '注册成功', true)
+          console.log('sign up!')
+          setTimeout(_ => { window.location.replace(login) }, 1000)
+        })
+      })
     }
   })
 
