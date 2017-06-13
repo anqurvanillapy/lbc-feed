@@ -1,0 +1,27 @@
+digraph topology {
+    label="系统结构 | 团队项目开发第二组";
+
+    subgraph cluster_lbcnews {
+        label="LBC News";
+        jsrt [label="JavaScript 运行时 (数据模型)"];
+        views [label="应用视图"];
+        views -> jsrt;
+        jsrt -> lbcnews_backend;
+
+        subgraph cluster_electron {
+            label="Electron";
+            lbcnews_backend [label="Node.js 后端 (本地逻辑)"];
+            lbcnews_backend -> nodejs_api;
+            lbcnews_backend -> pouchdb;
+            lbcnews_backend -> indexeddb;
+
+            subgraph cluster_browser_engine {
+                label="浏览器引擎";
+                nodejs_api [label="Node.js API"];
+                indexeddb [label="IndexedDB"];
+                pouchdb [label="PouchDB"];
+                pouchdb -> indexeddb;
+            }
+        }
+    }
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="initial-scale=1">
+  <meta name="description" content="News feed for left-behind children survey (assignment)">
+  <meta name="author" content="TeamDev2">
+  <title>Import News | LBC Feed</title>
+  <style>
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+  }
+    body.active {
+      opacity: 1;
+      transition: 2s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+  button {
+    padding: .5em;
+    border: 0;
+    background: transparent;
+    box-shadow: 0 3px 4px #999;
+  }
+    button:active { background: #eee; }
+
+  #import-list {
+    width: 50%;
+  }
+    #import-list.active {
+      transform: translateX(5%);
+      transition: 3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    #import-button,
+    #index-button {
+      margin: .5em auto;
+      width: 100%;
+    }
+
+    #errmsg {
+      font-style: italic;
+      color: crimson;
+    }
+
+    #errmsg, #xml-list { font-family: monospace; }
+  </style>
+</head>
+<body>
+  <div id="import-list">
+    <h1>新闻列表</h1>
+    <ul id="xml-list"></ul>
+    <p id="errmsg"></p>
+    <button id="import-button" type="button">添加 XML 文件</button>
+    <button id="index-button" type="button">开始分类</button>
+  </div>
+  <script src="js/app.main.js"></script>
+  <script src="js/components/import.component.js"></script>
+</body>
+</html>

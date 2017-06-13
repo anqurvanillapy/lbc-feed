@@ -262,7 +262,7 @@ header > nav > ul > li {
   color: #777;
 }
 
-.news-item {
+#tabs, .news-item {
   padding: .8em;
   margin: .6em auto;
   background: #fff;

@@ -9,7 +9,7 @@ const username = params.username
 
 /* Paths. */
 
-let [login, index] = ['login', 'index'].map(p => url.format({
+const [login, index] = ['login', 'index'].map(p => url.format({
   pathname: `${path.join(__dirname, p)}.html`,
   protocol: 'file:',
   slashes: true
@@ -59,8 +59,6 @@ document.getElementById('index-button').addEventListener('click', _ => {
   if (xmlArray.length) {
     let diff = xmlArray.filter(x => !_xmls.has(path.basename(x)))
 
-    console.log(xmlArray)
-    console.log(_xmls)
     console.log(diff)
     if (diff.length) cpXMLs(diff)
     document.getElementById('import-list').classList.add('active')
